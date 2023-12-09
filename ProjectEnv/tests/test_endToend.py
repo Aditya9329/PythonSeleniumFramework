@@ -15,14 +15,14 @@ if 5 sec is set max but object appear before that i will  proceed further.
 
 from selenium.webdriver import ActionChains
 from utilities.BaseClass import BaseClass
-
+from pageObjects.HomePage import HomePage
 # @pytest.mark.usefixtures("setup")
 class TestOne(BaseClass):
 
     def test_endToend(self):
         
-        
-        self.driver.find_element(By.LINK_TEXT,"Shop").click()
+        homePage = HomePage(self.driver)
+        homePage.shopItems().click()
         products = self.driver.find_elements(By.XPATH,"//div[@class='card h-100']")
 
         for product in products:
