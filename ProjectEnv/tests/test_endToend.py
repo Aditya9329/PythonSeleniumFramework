@@ -16,6 +16,7 @@ if 5 sec is set max but object appear before that i will  proceed further.
 from selenium.webdriver import ActionChains
 from utilities.BaseClass import BaseClass
 from pageObjects.HomePage import HomePage
+from pageObjects.CheckOutPage import CheckOutPage
 # @pytest.mark.usefixtures("setup")
 class TestOne(BaseClass):
 
@@ -23,15 +24,18 @@ class TestOne(BaseClass):
         
         homePage = HomePage(self.driver)
         homePage.shopItems().click()
-        products = self.driver.find_elements(By.XPATH,"//div[@class='card h-100']")
+
+        checkOutPage = CheckOutPage(self.driver)
+        products = checkOutPage.getProducts()
+        
 
         for product in products:
             productName = product.find_element(By.XPATH,"div/h4/a").text
             if productName == 'Blackberry':
                 product.find_element(By.XPATH,"div/button").click()
 
-
-        self.driver.find_element(By.CSS_SELECTOR,"a[class*='btn-primary']").click()
+        checkOutPage.getCheckOutAfterAddToCart().click()
+        # self.driver.find_element(By.CSS_SELECTOR,"a[class*='btn-primary']").click()
         self.driver.find_element(By.CSS_SELECTOR,"button[class='btn btn-success']").click()
         self.driver.find_element(By.ID,"country").send_keys("ind")
         wait = WebDriverWait(self.driver,10)
