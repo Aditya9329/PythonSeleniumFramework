@@ -17,6 +17,8 @@ from selenium.webdriver import ActionChains
 from utilities.BaseClass import BaseClass
 from pageObjects.HomePage import HomePage
 from pageObjects.CheckOutPage import CheckOutPage
+from pageObjects.ConfirmPage import ConfirmPage
+
 # @pytest.mark.usefixtures("setup")
 class TestOne(BaseClass):
 
@@ -35,11 +37,19 @@ class TestOne(BaseClass):
                 product.find_element(By.XPATH,"div/button").click()
 
         checkOutPage.getCheckOutAfterAddToCart().click()
-        # self.driver.find_element(By.CSS_SELECTOR,"a[class*='btn-primary']").click()
-        self.driver.find_element(By.CSS_SELECTOR,"button[class='btn btn-success']").click()
-        self.driver.find_element(By.ID,"country").send_keys("ind")
+
+        checkOutPage.getFinalCheckOut().click()
+
+        confirmPage = ConfirmPage(self.driver)
+
+        confirmPage.getCountry().send_keys("ind")
+
         wait = WebDriverWait(self.driver,10)
+
         wait.until(EC.presence_of_element_located((By.LINK_TEXT,"India")))
-        self.driver.find_element(By.LINK_TEXT,"India").click()
-        self.driver.find_element(By.XPATH,"//div[@class='checkbox checkbox-primary']").click()
-        self.driver.find_element(By.CSS_SELECTOR,"input[type='submit']").click()
+
+        confirmPage.getDeliverLocation().click()
+
+        confirmPage.getAgreeTerms().click()
+        
+        confirmPage.getPurchaseBtn().click()
